@@ -1,5 +1,4 @@
 import { useState, useRef } from 'react';
-import type { MouseEventHandler } from 'react';
 import clsx from 'clsx';
 import { OptionType } from 'src/constants/articleProps';
 import { Text } from 'components/text';
@@ -42,7 +41,8 @@ export const Select = (props: SelectProps) => {
 		setIsOpen(false);
 		onChange?.(option);
 	};
-	const handlePlaceHolderClick: MouseEventHandler<HTMLDivElement> = () => {
+
+	const handlePlaceHolderClick = () => {
 		setIsOpen((isOpen) => !isOpen);
 	};
 
@@ -70,7 +70,7 @@ export const Select = (props: SelectProps) => {
 						styles.placeholder,
 						styles[selected?.optionClassName || '']
 					)}
-					data-status={status}
+					data-status={selected ? 'selected' : 'placeholder'}
 					data-selected={!!selected?.value}
 					onClick={handlePlaceHolderClick}
 					role='button'
@@ -94,6 +94,7 @@ export const Select = (props: SelectProps) => {
 									key={option.value}
 									option={option}
 									onClick={() => handleOptionClick(option)}
+									disabled={selected?.value === option.value}
 								/>
 							))}
 					</ul>
