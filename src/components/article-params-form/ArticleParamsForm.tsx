@@ -27,7 +27,6 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 	const [formState, setFormState] =
 		useState<ArticleStateType>(defaultArticleState); // Состояние формы, инициализируем значениями по умолчанию
 	const sidebarRef = useRef<HTMLDivElement>(null); // Хук useRef для ссылки на элемент сайдбара
-
 	// Функция для переключения состояния сайдбара.
 	const toggleOpen = () => {
 		setIsOpen(!isOpen); // Меняем состояние isOpen на противоположное
