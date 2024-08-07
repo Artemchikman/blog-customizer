@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { ArrowButton } from 'components/arrow-button';
 import { Button } from 'components/button';
 import { RadioGroup } from 'components/radio-group';
@@ -14,7 +14,7 @@ import {
 	defaultArticleState,
 	ArticleStateType,
 } from 'src/constants/articleProps';
-
+import { useOutsideClick } from '../select/hooks/useOutsideClick'; // Импорт кастомного хука
 // Определяем типы для пропсов компонента ArticleParamsForm.
 type ArticleParamsFormProps = {
 	onApply: (newState: ArticleStateType) => void; // Функция обработки изменения состояния статьи
@@ -26,7 +26,7 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 	const [isOpen, setIsOpen] = useState(false); // Состояние для управления открытием/закрытием сайдбара
 	const [formState, setFormState] =
 		useState<ArticleStateType>(defaultArticleState); // Состояние формы, инициализируем значениями по умолчанию
-	const sidebarRef = useRef<HTMLDivElement>(null); // Хук useRef для ссылки на элемент сайдбара
+	const sidebarRef = useOutsideClick(() => setIsOpen(false)); // Использование хука
 
 	// Функция для переключения состояния сайдбара.
 	const toggleOpen = () => {
@@ -36,6 +36,7 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 	// Функция для сброса состояния формы до значений по умолчанию.
 	const resetForm = () => {
 		setFormState(defaultArticleState); // Устанавливаем состояние на значения по умолчанию
+		onApply(defaultArticleState); // Сбрасываем состояние статьи
 	};
 
 	// Функция для применения изменений, полученных из формы.
@@ -55,35 +56,6 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 			[key]: value, // Обновляем конкретное значение состояния
 		}));
 	};
-
-	// Эффект для закрытия сайдбара при клике вне его области или нажатии клавиши Escape.
-	useEffect(() => {
-		const handleClickOutside = (event: MouseEvent) => {
-			// Проверяем, был ли клик вне области сайдбара
-			if (
-				sidebarRef.current &&
-				!sidebarRef.current.contains(event.target as Node)
-			) {
-				setIsOpen(false); // Если да, закрываем сайдбар
-			}
-		};
-
-		const handleKeyDown = (event: KeyboardEvent) => {
-			if (event.key === 'Escape') {
-				setIsOpen(false); // Закрываем при нажатии Escape
-			}
-		};
-
-		// Добавляем обработчики событий для кликов и нажатий клавиш
-		document.addEventListener('mousedown', handleClickOutside);
-		document.addEventListener('keydown', handleKeyDown);
-
-		// Функция очистки, когда компонент размонтируется
-		return () => {
-			document.removeEventListener('mousedown', handleClickOutside);
-			document.removeEventListener('keydown', handleKeyDown);
-		};
-	}, []); // Эффект выполняется только при монтировании и размонтировании компонента
 
 	return (
 		<>
