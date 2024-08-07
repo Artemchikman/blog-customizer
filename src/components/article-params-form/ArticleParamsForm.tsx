@@ -14,7 +14,7 @@ import {
 	defaultArticleState,
 	ArticleStateType,
 } from 'src/constants/articleProps';
-import { useOutsideClick } from '../select/hooks/useOutsideClick'; // Импорт кастомного хука
+import { useOutsideClick } from '../select/hooks/useOutsideClick';
 // Определяем типы для пропсов компонента ArticleParamsForm.
 type ArticleParamsFormProps = {
 	onApply: (newState: ArticleStateType) => void; // Функция обработки изменения состояния статьи
